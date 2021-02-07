@@ -1,0 +1,25 @@
+# ________ ____  __ __  ______
+#  \___   // __ \|  |  \/  ___/
+#   /    /\  ___/|  |  /\___ \
+#  /_____ \\___  >____//____  >
+#        \/    \/           \/
+#                    Build System
+#                          v0.8.9
+#
+
+# default language
+language: bash
+
+globals:
+  VERSION: 1.0
+
+# command data
+commands:
+  install:
+    description: install commandline tool
+    exec: go install
+
+  release:
+    description: release a new version
+    exec: echo "TODO add goreleaser"
+
