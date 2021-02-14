@@ -68,6 +68,13 @@ func main() {
 
 	for _, e := range c.Entities {
 		if e.Image != nil {
+
+			// use black as default color if none has been specified
+			if e.Image.Color == "" {
+				e.Image.Color = "black"
+			}
+
+			// collect color for image name
 			if _, ok := coloredIcons[e.Image.Name]; !ok {
 				coloredIcons[e.Image.Name] = []string{e.Image.Color}
 			} else {
