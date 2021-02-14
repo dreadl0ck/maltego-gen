@@ -1,16 +1,17 @@
 #!/bin/bash
 #
 # ZEUS Error Dump
-# Timestamp: [Mon Feb 8 00:26:41 2021]
-# Error: exit status 1
+# Timestamp: [Sun Feb 14 15:23:27 2021]
+# Error: exit status 2
 # StdErr: 
-# go install: no install location for .go files listed on command line (GOBIN not set)
+# # github.com/dreadl0ck/maltego-gen
+# ./config.go:24:17: undefined: maltego.EntityCoreInfoExtended
+# ./main.go:82:27: too many arguments in call to material_icon_gen.GenerateIconsSVG
+# ./main.go:84:4: undefined: material_icon_gen.DefaultSvgURL
 # 
 
 
 #!/bin/bash
-VERSION="1.0"
 
 
-
-go install *.go
+go install

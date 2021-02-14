@@ -16,7 +16,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/dreadl0ck/maltego"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -25,29 +24,34 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	icongen "github.com/dreadl0ck/material-icon-gen"
 )
 
 func main() {
 
 	flag.Parse()
 
+	// read config file
 	data, err := ioutil.ReadFile(*flagConfig)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// unmarshal config
 	var c = new(config)
 	err = yaml.UnmarshalStrict(data, c)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// resolve executable path
 	c.Executable, err = exec.LookPath(c.Executable)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	spew.Dump(c)
+	//spew.Dump(c)
 
 	var (
 		org    = strings.Title(c.Org)
@@ -57,7 +61,39 @@ func main() {
 		propsPrefix = "properties."
 	)
 
+	maltegoSizes := []int{16, 24, 32, 48, 96}
+
+	// image name to colors
+	var coloredIcons = map[string][]string{}
+
+	for _, e := range c.Entities {
+		if e.Image != nil {
+			if _, ok := coloredIcons[e.Image.Name]; !ok {
+				coloredIcons[e.Image.Name] = []string{e.Image.Color}
+			} else {
+				coloredIcons[e.Image.Name] = append(coloredIcons[e.Image.Name], e.Image.Color)
+			}
+		}
+	}
+
+	if len(coloredIcons) > 0 {
+
+		// generate icons
+		icongen.GenerateIconsSVG(
+			*flagImagePath,
+			icongen.DefaultSvgURL,
+			maltegoSizes,
+			coloredIcons,
+			func(newBase string, color string) {
+				maltego.CreateXMLIconFile(newBase + "_" + color)
+			},
+		)
+	}
+
+	// prepare archive
 	maltego.GenMaltegoArchive(ident, org)
+
+	// generate entities
 	for _, e := range c.Entities {
 		for i, f := range e.Fields {
 			if f.Nullable {
@@ -66,6 +102,7 @@ func main() {
 				e.Fields[i] = maltego.NewRequiredStringField(f.Name, f.Description)
 			}
 		}
+
 		maltego.GenEntity(
 			org,
 			ident,
@@ -73,17 +110,17 @@ func main() {
 			propsPrefix,
 			ident,
 			e.Name,
-			e.Icon,
+			e.Image.Name,
 			e.Description,
 			e.Parent,
-			"black",
+			e.Image.Color,
 			nil,
 			e.Fields...,
 		)
 	}
 
+	// generate transforms
 	for _, t := range c.Transforms {
-		//args := []string{"run", t.ID}
 		maltego.GenTransform(
 			c.Org,
 			c.Author,
@@ -106,10 +143,18 @@ func main() {
 			Description: t.Description,
 		})
 	}
+
+	// generate a listing to include the local transforms
 	maltego.GenServerListing(prefix, ident, simpleTransforms)
+
+	// add transform set
 	maltego.GenTransformSet(c.Org, c.Description, prefix, ident, simpleTransforms)
+
+	// pack archive
 	maltego.PackMaltegoArchive(ident)
 
+	// copy the archive into the home directory
+	// TODO: make this step optional
 	file := c.Org + ".mtz"
 	path := filepath.Join(os.Getenv("HOME"), file)
 	maltego.CopyFile(file, path)

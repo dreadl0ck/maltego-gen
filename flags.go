@@ -17,4 +17,5 @@ import "flag"
 
 var (
 	flagConfig = flag.String("config", "maltego.yml", "config file path")
+	flagImagePath = flag.String("images", "/tmp/icons/material-icons", "image storage path")
 )

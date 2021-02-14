@@ -21,7 +21,7 @@ type config struct {
 	Org         string                               `yaml:"org"`
 	Author      string                               `yaml:"author"`
 	Description string                               `yaml:"description"`
-	Entities    []*maltego.EntityCoreInfo            `yaml:"entities"`
+	Entities    []*maltego.EntityCoreInfoExtended    `yaml:"entities"`
 	Transforms  []*maltego.TransformCoreInfoExtended `yaml:"transforms"`
 	Executable  string                               `yaml:"executable"`
 }
