@@ -17,11 +17,24 @@ import (
 	"github.com/dreadl0ck/maltego"
 )
 
+// YAML configuration
 type config struct {
-	Org         string                               `yaml:"org"`
-	Author      string                               `yaml:"author"`
-	Description string                               `yaml:"description"`
-	Entities    []*maltego.EntityCoreInfoExtended    `yaml:"entities"`
-	Transforms  []*maltego.TransformCoreInfoExtended `yaml:"transforms"`
-	Executable  string                               `yaml:"executable"`
+
+	// Organization name
+	Org string `yaml:"org"`
+
+	// Author name
+	Author string `yaml:"author"`
+
+	// Description of this Maltego configuration
+	Description string `yaml:"description"`
+
+	// Entities to generate
+	Entities []*maltego.EntityCoreInfoExtended `yaml:"entities"`
+
+	// Transforms to generate
+	Transforms []*maltego.TransformCoreInfoExtended `yaml:"transforms"`
+
+	// Executable file to use
+	Executable string `yaml:"executable"`
 }

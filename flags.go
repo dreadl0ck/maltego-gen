@@ -16,6 +16,8 @@ package main
 import "flag"
 
 var (
-	flagConfig = flag.String("config", "maltego.yml", "config file path")
-	flagImagePath = flag.String("images", "/tmp/icons/material-icons", "image storage path")
+	flagConfig         = flag.String("config", "maltego.yml", "config file path")
+	flagImagePath      = flag.String("images", "/tmp/icons/material-icons", "image storage path")
+	flagTransformDebug = flag.Bool("transform-debug", false, "enable debug mode for generated transforms")
+	flagCopyToHomeDir  = flag.Bool("copy", true, "copy bundle into home folder")
 )

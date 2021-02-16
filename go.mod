@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/Microsoft/go-winio v0.4.16 // indirect
-	github.com/dreadl0ck/maltego v0.0.2-0.20210214142236-84e60c758329
+	github.com/dreadl0ck/maltego v0.0.2-0.20210214204347-b29a55311830
 	github.com/dreadl0ck/material-icon-gen v0.0.0-20210214144425-b93b94838986
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351 // indirect

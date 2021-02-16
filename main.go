@@ -51,13 +51,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//spew.Dump(c)
-
 	var (
-		org    = strings.Title(c.Org)
-		ident  = strings.ToLower(org)
-		prefix = ident + "."
-		//machinePrefix = ident + "_"
+		org         = strings.Title(c.Org)
+		ident       = strings.ToLower(org)
+		prefix      = ident + "."
 		propsPrefix = "properties."
 	)
 
@@ -111,6 +108,7 @@ func main() {
 		}
 
 		maltego.GenEntity(
+			*flagImagePath,
 			org,
 			ident,
 			prefix,
@@ -138,10 +136,11 @@ func main() {
 			t.InputEntity,
 			c.Executable,
 			t.Args,
-			true,
+			*flagTransformDebug,
 		)
 	}
 
+	// collect as simpleTransforms, to pass it to the server listing generation
 	simpleTransforms := []*maltego.TransformCoreInfo{}
 	for _, t := range c.Transforms {
 		simpleTransforms = append(simpleTransforms, &maltego.TransformCoreInfo{
@@ -161,9 +160,10 @@ func main() {
 	maltego.PackMaltegoArchive(ident)
 
 	// copy the archive into the home directory
-	// TODO: make this step optional
-	file := c.Org + ".mtz"
-	path := filepath.Join(os.Getenv("HOME"), file)
-	maltego.CopyFile(file, path)
-	fmt.Println("copied generated file to", path)
+	if *flagCopyToHomeDir {
+		file := c.Org + ".mtz"
+		path := filepath.Join(os.Getenv("HOME"), file)
+		maltego.CopyFile(file, path)
+		fmt.Println("copied generated file to", path)
+	}
 }
