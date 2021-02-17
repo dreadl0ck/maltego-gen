@@ -22,6 +22,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/user"
 	"path/filepath"
 	"strings"
 
@@ -124,9 +125,25 @@ func main() {
 		)
 	}
 
+	workingDir := "/usr/local"
+	if c.WorkingDir != "" {
+		for _, v := range []string{"~", "${HOME}", "$HOME"} {
+			if strings.Contains(c.WorkingDir, v) {
+				u, err := user.Current()
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				// replace home dir variable with path
+				workingDir = strings.Replace(c.WorkingDir, v, u.HomeDir, 1)
+			}
+		}
+	}
+
 	// generate transforms
 	for _, t := range c.Transforms {
 		maltego.GenTransform(
+			workingDir,
 			c.Org,
 			c.Author,
 			prefix,

@@ -37,4 +37,7 @@ type config struct {
 
 	// Executable file to use
 	Executable string `yaml:"executable"`
+
+	// WorkingDir to use for transforms
+	WorkingDir string `yaml:"workingDir"`
 }
