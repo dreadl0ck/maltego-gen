@@ -46,10 +46,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// resolve executable path
-	c.Executable, err = exec.LookPath(c.Executable)
-	if err != nil {
-		log.Fatal(err)
+	if c.Executable != "" {
+		// resolve executable path
+		c.Executable, err = exec.LookPath(c.Executable)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	var (
@@ -108,6 +110,7 @@ func main() {
 			}
 		}
 
+		// TODO: allow to make fields optional
 		maltego.GenEntity(
 			*flagImagePath,
 			org,
