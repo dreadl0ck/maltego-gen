@@ -145,6 +145,14 @@ func main() {
 
 	// generate transforms
 	for _, t := range c.Transforms {
+
+		var executable string
+		if c.Executable != "" {
+			executable = c.Executable
+		} else {
+			executable = t.Executable
+		}
+
 		maltego.GenTransform(
 			workingDir,
 			c.Org,
@@ -154,7 +162,7 @@ func main() {
 			t.ID,
 			t.Description,
 			t.InputEntity,
-			c.Executable,
+			executable,
 			t.Args,
 			*flagTransformDebug,
 		)
